@@ -1,0 +1,100 @@
+package com.example.demo.helloworld;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+
+
+record Person (String name, int age, Address address) {};
+record Address (String firstLine , String city) {};
+@Configuration
+public class Helloworld_Configuration {
+	
+	@Bean
+	public String name()
+	{
+		return "vivek";
+	}
+    
+	@Bean
+	public int age()
+	{
+		return 22;
+	}
+	@Bean
+	public Person person()
+	{
+		return new Person("vivek", 22, new Address("main street","parvathipuram"));
+	}	
+	@Bean(name = "address2") // use this to change the name of bean 
+	public Address address()
+	{
+		return new Address("main street","parvathipuram");
+	}	
+	
+	//Creating new beans with already existed beans
+	@Bean
+	public Person person2()
+	{
+		return new Person(name(),age(),address());
+	}	
+	
+	//alternate 
+	@Bean
+	public Person person3(String name, int age, Address address2)
+	{
+		return new Person(name,age,address2);
+	}
+	
+	@Bean
+	@Primary
+	public Address address3()
+	{
+		return new Address("newyork","usa");
+	}	
+	
+	@Bean
+	public Person person4(String name, int age, Address address3)
+	{
+		return new Person(name,age,address3);
+	}
+	
+	
+}
+
+
+// 2. MAIN IMPLEMENTATION
+package com.example.demo.helloworld;
+
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+public class App02HelloWorldSpringApp {
+
+	public static void main(String[] args) {
+	    //  1.Launch  a spring context
+		try(var context = new AnnotationConfigApplicationContext(Helloworld_Configuration.class))
+		{
+		
+		// 2.configure the things that we want Spring to manage
+	        // Helloworld_Configuration - @Configuration
+		      // created name method with - @Bean annotation
+		
+		// 3. retrieving beans managed by spring
+           System.out.println("Name is " +context.getBean("name"));  // By name
+           
+           System.out.println("Age is "+context.getBean("age"));
+           System.out.println("person "+context.getBean("person"));
+           System.out.println("Address "+context.getBean("address2"));
+         //  System.out.println("Address "+context.getBean("address3"));
+           System.out.println("person 2"+context.getBean("person2"));
+           System.out.println("person 3"+context.getBean("person3"));
+           System.out.println("person 3"+context.getBean("person4"));
+        // 4. Other types of retrieving
+           
+           System.out.println("Address "+context.getBean(Address.class));  //By type
+         
+		}
+           
+	}
+
+}
