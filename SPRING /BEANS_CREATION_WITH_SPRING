@@ -11,7 +11,7 @@ import com.example.demo.game.Gaming_Console;
 import com.example.demo.game.Pacman;
 
 @Configuration
-@ComponentScan
+@ComponentScan("com.example.demo.game")
 public class App01GamingBasicJava {
 
 	/*@Bean
