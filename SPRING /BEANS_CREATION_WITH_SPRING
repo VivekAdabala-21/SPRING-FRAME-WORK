@@ -14,12 +14,12 @@ import com.example.demo.game.Pacman;
 @ComponentScan
 public class App01GamingBasicJava {
 
-	@Bean
-	public GameRunner gameRunner(Gaming_Console game)
+	/*@Bean
+	public GameRunner gameRunner(Gaming_Console game)  // Spring will create it.
 	{
 		var GameRunner = new GameRunner(game);
 		return GameRunner;
-	}
+	}*/
 	public static void main(String[] args) {
 		try( var context =
 				new AnnotationConfigApplicationContext(App01GamingBasicJava.class))
@@ -57,3 +57,31 @@ public class Pacman implements Gaming_Console
 		System.out.println(" MOVE RIGHT ");
 	}
 }
+
+
+//GameRunner class
+package com.example.demo.game;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class GameRunner {
+	
+	private Gaming_Console game;
+
+	public GameRunner(Gaming_Console game) {
+		super();
+		this.game = game;
+	}
+
+	public void run() {
+		System.out.println("Running game : "+ game);
+		
+		game.up();
+		game.down();
+		game.left();
+		game.right();
+		
+	}
+}
+
